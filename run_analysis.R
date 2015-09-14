@@ -71,5 +71,7 @@ tidy_data_sets <- dcast(tidyMelt, subject + activity~ variable,mean)
 write.table(tidy_data_sets,"./tidydata.txt",row.names = FALSE)
 
 
+## Create codebook.md
+
 write.table(paste("### Complete list of Features"),file = "./codebook.md",row.names = FALSE,col.names = FALSE,quote = FALSE,append = FALSE)
 write.table(paste("| ", colnames(tidy_data_sets)),file = "./codebook.md",row.names = FALSE,col.names = FALSE, quote = FALSE,append = TRUE)
