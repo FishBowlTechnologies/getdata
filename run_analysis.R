@@ -8,6 +8,7 @@ colnames(activity_lables)<-c('S.no','activity')
 features <- read.table("./UCI HAR Dataset/features.txt")
 colnames(features)<-c('S.no','feature')
 
+
 #read train subject sets and labels
 subject_train <- read.table("./UCI HAR Dataset/train/subject_train.txt")
 X_train <- read.table("./UCI HAR Dataset/train/X_train.txt")
@@ -32,7 +33,7 @@ features_name <- as.vector(features$feature)
 # return positon of features which include mean or standard deviation
 features_mean_std_index <- grep('mean\\(\\)|std\\(\\)',features_name)
 # select only those columns that includes the data of mean or standard deviation
-data_sets_mean_std = data_sets[,features_mean_std_index]
+data_sets_mean_std <- data_sets[,features_mean_std_index]
 
 
 ## STEP 3: Uses descriptive activity names to name the activities in the data set
@@ -64,14 +65,8 @@ colnames(data_sets_mean_std)[2:ncol(data_sets_mean_std)] <- features_name
 tidy_data_sets <- cbind(subjects,data_sets_mean_std)
 colnames(tidy_data_sets)[1]<-c('subject')
 tidyMelt <- melt(tidy_data_sets,id=c(colnames(tidy_data_sets)[1:2]),measure.vars = c(colnames(tidy_data_sets)[3:ncol(tidy_data_sets)]))
-tidy_data_sets <- dcast(tidyMelt, subject + activity~ variable,mean)
+tidy_data_sets_final <- dcast(tidyMelt, subject + activity~ variable,mean)
 
 ## Create a tidy data sets file
 
-write.table(tidy_data_sets,"./tidydata.txt",row.names = FALSE)
-
-
-## Create codebook.md
-
-write.table(paste("### Complete list of Features"),file = "./codebook.md",row.names = FALSE,col.names = FALSE,quote = FALSE,append = FALSE)
-write.table(paste("| ", colnames(tidy_data_sets)),file = "./codebook.md",row.names = FALSE,col.names = FALSE, quote = FALSE,append = TRUE)
+write.table(tidy_data_sets_final,"./tidydata.txt",row.names = FALSE)
